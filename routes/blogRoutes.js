@@ -1,4 +1,5 @@
 const express = require("express")
+const Joi = require("joi")
 const router = express.Router()
 const Blog = require("../model/Blog")
 const blogs = []
@@ -17,13 +18,20 @@ router.get("/posts/:id", (req, res) => {
   })
 })
 
+const blogSchema = Joi.object({
+  title: Joi.string().min(5).required(),
+  content: Joi.string().min(10).required(),
+  author: Joi.string().required(),
+})
+
 router.post("/posts", (req, res) => {
   const { title, content, author } = req.body
 
-  if (!title || !content || !author) {
+  const { error } = blogSchema.validate(req.body)
+
+  if (error) {
     return res.status(400).json({
-      message:
-        "You must provide the title, content, and the author to create a blog post",
+      message: error.details[0].message,
     })
   }
 
