@@ -1,5 +1,6 @@
 const express = require("express")
 const router = express.Router()
+const Blog = require("../model/Blog")
 const blogs = []
 
 router.get("/posts/:id", (req, res) => {
@@ -11,7 +12,6 @@ router.get("/posts/:id", (req, res) => {
       message: "Blog not found",
     })
   }
-
   res.status(200).json({
     blog,
   })
@@ -19,24 +19,25 @@ router.get("/posts/:id", (req, res) => {
 
 router.post("/posts", (req, res) => {
   const { title, content, author } = req.body
+
   if (!title || !content || !author) {
     return res.status(400).json({
       message:
         "You must provide the title, content, and the author to create a blog post",
     })
   }
-  const newBlog = {
+
+  const blog = new Blog({
     id: blogs.length + 1,
-    title: req.body.title,
-    content: req.body.content,
-    author: req.body.author,
-    createdAt: new Date(),
-  }
-  blogs.push(newBlog)
+    title,
+    content,
+    author,
+  })
+  blogs.push(blog)
 
   res.status(201).json({
     message: "Post created successfully!",
-    blog: newBlog,
+    blog,
   })
 })
 
