@@ -48,3 +48,10 @@ node server.js
 - Data is stored in-memory through an array.
 - Input sanitization with sanitize-html.
 - Input validation with Joi
+
+## Files of Interest
+
+- server.js -- application entrypoint
+- routes/blogRoutes.js -- route handlers, validation, in-memory store
+- model/Blog.js -- Data modeling using Blog class
+- package.json -- scripts and dependencies
